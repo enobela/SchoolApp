@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Button, FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import RNPickerSelect from 'react-native-picker-select';
 
 const DATA =[
   {
@@ -23,16 +24,35 @@ const DATA =[
   type ItemsProps = {sname: string};
 
 
+
   const Item =({sname}:ItemsProps) =>(
     <View>
       <Text>{sname}</Text>
     </View>
   );
+ 
 export default function App() {
 
 // Variables 
 const [ModuleName, setModuleName]= useState('');
 const [studentName, setStudentName]= useState('');
+
+const [QualName, setQualName]= useState<string>(''); // variable to store qualification
+
+const [QualArray, setQualsArray] = useState<string[]>([]); // Array to store Qualifactions
+
+const [selectedItem, setSelectedItem] = useState<string | null>(null);
+
+const AddStudent=()=>{
+
+
+}
+// this function will add the Qualname inside the Array 
+
+const SaveData = () => {
+  setQualsArray([...QualArray, QualName]); // Appending the QualName to QualArray
+  setQualName(''); // clear the QualName TextInput
+};
 
   return (
     
@@ -46,12 +66,26 @@ const [studentName, setStudentName]= useState('');
 <TextInput style={styles.formInput} placeholder=''onChangeText={newname=>setStudentName(newname)}/>
 <Text style={styles.Textuser}>Module Name</Text>
 <TextInput style={styles.formInput} placeholder=''onChangeText={newText=>setModuleName(newText)}/>
+<Text>Select Qual Name</Text>
+<RNPickerSelect
+onValueChange={(value) => setSelectedItem(value)}
+items={QualArray.map((qual)=>({label: qual, value:qual}))}
+/>
+
+
 <View style={styles.buttonClick}>
-<Button   title='Add' onPress={()=>{
-  alert(studentName +" "+ ModuleName)}} />
+<Button   title='Add' onPress={AddStudent} />
 </View>
 
 
+<Text>ADD QUALIFICATION</Text>
+<Text style={styles.Textuser}>Qual Name</Text>
+<TextInput style={styles.formInput} 
+value={QualName}
+ placeholder='' onChangeText={newText=>setQualName(newText)}
+ />
+<Button title='Add Qual' onPress={SaveData}
+/>
  </View>
 <View style={styles.Listcontainer}>
   <Text style={styles.moduleList}>Students List</Text>
